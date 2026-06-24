@@ -1,0 +1,198 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    /* 禁止用户选择文字 / 触摸高亮 */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* ========== 触控按钮容器 ========== */
+#touch-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    pointer-events: none;   /* 让点击穿透到画布？需要改成 auto */
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px 30px;
+}
+
+#touch-controls.active {
+    pointer-events: auto;
+}
+
+/* ---------- 左右方向键 ---------- */
+.dpad {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+.dpad-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #fff;
+    pointer-events: auto;
+    touch-action: none;
+    transition: background 0.1s;
+}
+
+.dpad-btn:active,
+.dpad-btn.pressed {
+    background: rgba(255,255,255,0.5);
+}
+
+/* ---------- 动作按钮 (右侧) ---------- */
+.action-buttons {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
+
+.action-btn {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 3px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    pointer-events: auto;
+    touch-action: none;
+    transition: background 0.1s;
+}
+
+.action-btn:active,
+.action-btn.pressed {
+    background: rgba(255,255,255,0.5);
+}
+
+#btn-jump {
+    width: 100px;
+    height: 100px;
+    font-size: 22px;
+}
+
+/* 响应式：小屏幕缩小按钮 */
+@media (max-width: 480px) {
+    .dpad-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+    }
+
+    .action-btn {
+        width: 70px;
+        height: 70px;
+    }
+    #btn-jump {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* ---------- 暂停按钮 (右上角) ---------- */
+#btn-pause.pause-top {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 20;
+    pointer-events: auto;
+    touch-action: none;
+    transition: background 0.1s;
+}
+
+#btn-pause.pause-top:active,
+#btn-pause.pause-top.pressed {
+    background: rgba(255,255,255,0.45);
+}
+
+/* ---------- 重新开始按钮 (死亡/Win时居中显示) ---------- */
+#btn-restart.restart-btn {
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(0, 200, 0, 0.5);
+    border: 3px solid rgba(0, 255, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #fff;
+    z-index: 30;
+    pointer-events: auto;
+    touch-action: none;
+    transition: background 0.1s;
+}
+
+#btn-restart.restart-btn:active,
+#btn-restart.restart-btn.pressed {
+    background: rgba(0, 255, 0, 0.7);
+}
+
+/* ---------- 水印 ---------- */
+#watermark {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.15);
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+    z-index: 5;
+    pointer-events: none;
+    user-select: none;
+    writing-mode: vertical-rl;
+    letter-spacing: 4px;
+}

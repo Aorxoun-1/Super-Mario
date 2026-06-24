@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Mario</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="gameCanvas" tabindex="0"></canvas>
+
+    <!-- 暂停 (右上角) -->
+    <div id="btn-pause" class="pause-top"
+         onpointerdown="window.__keys&&(window.__keys['Escape']=true);window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+         onpointerup="window.__keys&&(window.__keys['Escape']=false)"
+         ontouchstart="event.preventDefault();window.__keys&&(window.__keys['Escape']=true);window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+         ontouchend="window.__keys&&(window.__keys['Escape']=false)">||</div>
+
+    <!-- 重新开始 -->
+    <div id="btn-restart" class="restart-btn" style="display:none;"
+         onpointerdown="window.__keys&&(window.__keys['Enter']=true);window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+         onpointerup="window.__keys&&(window.__keys['Enter']=false)"
+         ontouchstart="event.preventDefault();window.__keys&&(window.__keys['Enter']=true);window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+         ontouchend="window.__keys&&(window.__keys['Enter']=false)">↺</div>
+
+    <!-- 水印 -->
+    <div id="watermark">By 訸</div>
+
+    <!-- 触控按钮 -->
+    <div id="touch-controls">
+        <div class="dpad">
+            <div class="dpad-btn" id="btn-left"
+                 onpointerdown="window.__keys&&(window.__keys['ArrowLeft']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 onpointerup="window.__keys&&(window.__keys['ArrowLeft']=false);this.classList.remove('pressed')"
+                 ontouchstart="event.preventDefault();window.__keys&&(window.__keys['ArrowLeft']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 ontouchend="window.__keys&&(window.__keys['ArrowLeft']=false);this.classList.remove('pressed')">◄</div>
+            <div class="dpad-btn" id="btn-right"
+                 onpointerdown="window.__keys&&(window.__keys['ArrowRight']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 onpointerup="window.__keys&&(window.__keys['ArrowRight']=false);this.classList.remove('pressed')"
+                 ontouchstart="event.preventDefault();window.__keys&&(window.__keys['ArrowRight']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 ontouchend="window.__keys&&(window.__keys['ArrowRight']=false);this.classList.remove('pressed')">►</div>
+        </div>
+        <div class="action-buttons">
+            <div class="action-btn" id="btn-jump"
+                 onpointerdown="window.__keys&&(window.__keys['Space']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 onpointerup="window.__keys&&(window.__keys['Space']=false);this.classList.remove('pressed')"
+                 ontouchstart="event.preventDefault();window.__keys&&(window.__keys['Space']=true);this.classList.add('pressed');window.AndroidVibrate&&AndroidVibrate.vibrate(15)"
+                 ontouchend="window.__keys&&(window.__keys['Space']=false);this.classList.remove('pressed')">A</div>
+        </div>
+    </div>
+
+    <script src="js/input.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        const game = new Game();
+        Game.sfx = new AudioManager();
+        Game.sprites = new Sprites();
+        game.start();
+
+        const restartTimer = setInterval(function() {
+            var btn = document.getElementById('btn-restart');
+            btn.style.display = (!game.player.alive || Game.win) ? 'flex' : 'none';
+        }, 200);
+
+        window.__stopGame = function() { game.running = false; };
+        window.__startGame = function() {
+            if (!game.running) {
+                game.running = true;
+                game.lastTime = performance.now();
+                game._loop(performance.now());
+            }
+        };
+        window.__destroyGame = function() {
+            game.stop();
+            game.input.destroy();
+            clearInterval(restartTimer);
+            Game.sfx = null;
+            Game.sprites = null;
+        };
+    </script>
+</body>
+</html>
