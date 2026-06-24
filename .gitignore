@@ -6,3 +6,4 @@ app/build/
 local.properties
 *.apk
 *.aab
+screenshot*.png
