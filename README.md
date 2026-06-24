@@ -116,20 +116,3 @@ android-app/
 | 空格 | A（右下） | 跳跃 |
 | P / Esc | ⏸（右上角） | 暂停 |
 | Enter | ↺（死亡时出现） | 重新开始 |
-
----
-
-## 构建命令
-
-```batch
-cd android-app
-gradlew.bat assembleDebug      # Debug APK
-gradlew.bat assembleRelease    # Release APK
-adb install -r app\build\outputs\apk\debug\app-debug.apk
-```
-
----
-
-## 水印
-
-游戏画面右侧中间竖排显示：**By 訸**
